@@ -39,19 +39,19 @@ my-library/
 
 ### Phase 1: Project Initialization
 
-- [ ] Initialize Go module (`go mod init`)
-- [ ] Create package.json for NPM distribution
+- [x] Initialize Go module (`go mod init`)
+- [x] Create package.json for NPM distribution
 - [ ] Set up directory structure (core/, cmd/wasm/, internal/, lib/, schemas/)
-- [ ] Install jtd-codegen as dev dependency (`npm install --save-dev jtd-codegen`)
-- [ ] Set up JTD schema directory
+- [x] Install jtd-codegen as dev dependency (`npm install --save-dev jtd-codegen`)
+- [x] Set up JTD schema directory
 
 ### Phase 2: JTD Schema Setup
 
-- [ ] Create `.jtd.json` schema files for type definitions
-- [ ] Define data structures using JSON Typedef format
-- [ ] Generate Go code using jtd-codegen
-- [ ] Generate TypeScript types using jtd-codegen
-- [ ] Add JTD code generation script to build process
+- [x] Create `.jtd.json` schema files for type definitions
+- [x] Define data structures using JSON Typedef format
+- [x] Generate Go code using jtd-codegen
+- [x] Generate TypeScript types using jtd-codegen
+- [x] Add JTD code generation script to build process
 - [ ] Document JTD schemas
 
 ### Phase 3: Core Go Logic
