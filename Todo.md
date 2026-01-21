@@ -61,6 +61,18 @@ my-library/
   - [ ] Use JTD-generated types
   - [ ] Write unit tests for core logic
   - [ ] Ensure testability without WASM runtime
+
+  ### Core logic
+  - [ ] Create tournament
+  - [ ] Add Player method
+  - [ ] Add a draw method
+  - [ ] Generate Logic for progressing Draws
+    - [ ] League
+    - [ ] knockout
+    - [ ] Interface for calling the function through other places
+    - [ ] Pass in custom function for calculating next draw
+  - [ ] Call Progress to the next draw stage
+
 - [ ] Create internal helper packages as needed
 
 ### Phase 4: WASM Entry Point
