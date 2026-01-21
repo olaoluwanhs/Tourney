@@ -7,7 +7,7 @@ Building a Go library that compiles to WebAssembly (WASM) for use in JavaScript/
 ## Technology Stack
 
 - **Golang**: Main language for core logic
-- **Protocol Buffers (protobuf)**: Type definitions and serialization
+- **JSON Typedef (JTD) with jtd-codegen**: Type definitions and code generation
 - **WebAssembly (WASM)**: Compilation target
 - **wasm_exec.js**: Glue code for JavaScript runtime
 - **wasm_exec.d.ts**: TypeScript type definitions for WASM integration
@@ -41,23 +41,24 @@ my-library/
 
 - [ ] Initialize Go module (`go mod init`)
 - [ ] Create package.json for NPM distribution
-- [ ] Set up directory structure (core/, cmd/wasm/, internal/, lib/)
-- [ ] Install Protocol Buffers compiler (protoc)
-- [ ] Install Go protobuf plugins (`protoc-gen-go`)
+- [ ] Set up directory structure (core/, cmd/wasm/, internal/, lib/, schemas/)
+- [ ] Install jtd-codegen as dev dependency (`npm install --save-dev jtd-codegen`)
+- [ ] Set up JTD schema directory
 
-### Phase 2: Protocol Buffers Setup
+### Phase 2: JTD Schema Setup
 
-- [ ] Create `.proto` files for type definitions
-- [ ] Define message types and services
-- [ ] Generate Go code from protobuf definitions
-- [ ] Add protobuf generation script to build process
-- [ ] Document protobuf schema
+- [ ] Create `.jtd.json` schema files for type definitions
+- [ ] Define data structures using JSON Typedef format
+- [ ] Generate Go code using jtd-codegen
+- [ ] Generate TypeScript types using jtd-codegen
+- [ ] Add JTD code generation script to build process
+- [ ] Document JTD schemas
 
 ### Phase 3: Core Go Logic
 
 - [ ] Implement pure Go logic in `core/` directory
   - [ ] Keep code platform-agnostic (no syscall/js imports)
-  - [ ] Use protobuf-generated types
+  - [ ] Use JTD-generated types
   - [ ] Write unit tests for core logic
   - [ ] Ensure testability without WASM runtime
 - [ ] Create internal helper packages as needed
@@ -71,7 +72,7 @@ my-library/
   - [ ] `js.Global().Set()` for traditional exports, OR
   - [ ] `//go:wasmexport` directives (Go 1.21+)
 - [ ] Add error handling and type conversions
-- [ ] Handle protobuf serialization/deserialization at boundary
+- [ ] Handle JSON serialization/deserialization at boundary using JTD-generated types
 
 ### Phase 5: WASM Build Configuration
 
@@ -89,9 +90,9 @@ my-library/
   - [ ] Expose Go functions as JavaScript API
   - [ ] Handle async initialization
   - [ ] Add error handling and type conversions
-  - [ ] Implement protobuf encode/decode helpers
+  - [ ] Implement JSON encode/decode helpers
 - [ ] Create `lib/index.d.ts` TypeScript definitions
-  - [ ] Define types matching protobuf schemas
+  - [ ] Use JTD-generated TypeScript types
   - [ ] Export function signatures
   - [ ] Document public API
 
@@ -129,8 +130,11 @@ my-library/
 ## Build Commands Reference
 
 ```bash
-# Generate protobuf code
-protoc --go_out=. --go_opt=paths=source_relative proto/*.proto
+# Generate Go types from JTD schemas
+npx jtd-codegen --go-out=core/types --go-package=types schemas/*.jtd.json
+
+# Generate TypeScript types from JTD schemas
+npx jtd-codegen --typescript-out=lib/types schemas/*.jtd.json
 
 # Build WASM
 GOOS=js GOARCH=wasm go build -o lib/library.wasm cmd/wasm/main.go
@@ -150,7 +154,8 @@ npm run build
 ## Notes
 
 - Keep `core/` package free of syscall/js dependencies for better testability
-- Use protobuf for all data crossing the WASM boundary for type safety
+- Use JTD-generated types for all data crossing the WASM boundary for type safety
+- JSON serialization is used for data exchange between Go and JavaScript
 - Consider WASM binary size optimization techniques
 - Document memory management between Go and JavaScript
 - Plan for versioning and backward compatibility
