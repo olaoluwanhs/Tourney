@@ -1,0 +1,19 @@
+{
+  "definitions": {
+    "Draws": {
+      "properties": {
+        "round": { "type": "uint8" },
+        "expectedNumberOfMatches": { "type": "uint32" },
+        "matches": {
+          "elements": {
+            "properties": {
+              "game": { "ref": "Game" }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ref": "Draws"
+}

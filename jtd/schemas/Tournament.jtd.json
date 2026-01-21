@@ -1,0 +1,25 @@
+{
+  "definitions": {
+    "Tournament": {
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "draws": {
+          "elements": {
+            "ref": "Draws"
+          }
+        },
+        "status": {
+          "enum": ["scheduled", "ongoing", "completed"]
+        },
+        "leaderboard": {
+          "elements": {
+            "ref": "Player"
+          }
+        }
+      }
+    }
+  },
+
+  "ref": "Tournament"
+}

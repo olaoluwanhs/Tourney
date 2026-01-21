@@ -1,0 +1,23 @@
+{
+  "definitions": {
+    "Game": {
+      "properties": {
+        "id": { "type": "string", "nullable": true },
+        "expectedNumberOfPlayers": { "type": "uint32" },
+        "players": {
+          "elements": { "ref": "Player" }
+        },
+        "scores": {
+          "elements": {
+            "properties": {
+              "playerId": { "type": "string" },
+              "score": { "type": "float32" }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "ref": "Game"
+}

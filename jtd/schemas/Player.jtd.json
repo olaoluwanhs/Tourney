@@ -1,0 +1,23 @@
+{
+  "definitions": {
+    "Player": {
+      "discriminator": "kind",
+      "mapping": {
+        "id": {
+          "properties": {
+            "value": { "type": "string" }
+          }
+        },
+        "user": {
+          "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "associatedImage": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+
+  "ref": "Player"
+}

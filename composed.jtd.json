@@ -1,0 +1,104 @@
+{
+  "ref": "Tournament",
+  "definitions": {
+    "Draws": {
+      "properties": {
+        "round": {
+          "type": "uint8"
+        },
+        "expectedNumberOfMatches": {
+          "type": "uint32"
+        },
+        "matches": {
+          "elements": {
+            "properties": {
+              "game": {
+                "ref": "Game"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Game": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "nullable": true
+        },
+        "expectedNumberOfPlayers": {
+          "type": "uint32"
+        },
+        "players": {
+          "elements": {
+            "ref": "Player"
+          }
+        },
+        "scores": {
+          "elements": {
+            "properties": {
+              "playerId": {
+                "type": "string"
+              },
+              "score": {
+                "type": "float32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Player": {
+      "discriminator": "kind",
+      "mapping": {
+        "id": {
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "user": {
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "associatedImage": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Tournament": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "draws": {
+          "elements": {
+            "ref": "Draws"
+          }
+        },
+        "status": {
+          "enum": [
+            "scheduled",
+            "ongoing",
+            "completed"
+          ]
+        },
+        "leaderboard": {
+          "elements": {
+            "ref": "Player"
+          }
+        }
+      }
+    }
+  }
+}

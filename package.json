@@ -1,0 +1,25 @@
+{
+  "name": "tourney",
+  "version": "1.0.0",
+  "description": "This is a library that is used for managing tournamnets",
+  "keywords": [
+    "Tournamnets",
+    "Games",
+    "Draws"
+  ],
+  "homepage": "https://github.com/olaoluwanhs/Tourney#readme",
+  "bugs": {
+    "url": "https://github.com/olaoluwanhs/Tourney/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olaoluwanhs/Tourney.git"
+  },
+  "license": "ISC",
+  "author": "Olaoluwa Babatunde",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
