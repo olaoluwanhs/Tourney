@@ -9,6 +9,8 @@ export interface Draws {
 
   expectedNumberOfMatches: number;
 
+  id: string;
+
   matches: DrawsMatch[];
 
   round: number;

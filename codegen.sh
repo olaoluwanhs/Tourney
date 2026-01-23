@@ -15,6 +15,11 @@ fi
 mkdir -p types/generated_typescript
 mkdir -p types/generated_go
 
+
+# Call node jtd-composer
+node jtd/jtd-composer.mjs
+
+
 # Generate code from JSON Type Definition files
 jtd-codegen --typescript-out types/generated_typescript -- composed.jtd.json
 jtd-codegen --go-out types/generated_go -- composed.jtd.json

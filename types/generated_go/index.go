@@ -34,6 +34,8 @@ type Draws struct {
 
   ExpectedNumberOfMatches uint32 `json:"expectedNumberOfMatches"`
 
+  Id string `json:"id"`
+
   Matches []DrawsMatch `json:"matches"`
 
   Round uint8 `json:"round"`

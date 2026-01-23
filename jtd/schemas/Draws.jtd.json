@@ -2,6 +2,7 @@
   "definitions": {
     "Draws": {
       "properties": {
+        "id": { "type": "string" },
         "round": { "type": "uint8" },
         "expectedNumberOfMatches": { "type": "uint32" },
         "matches": {
