@@ -9,6 +9,7 @@ import (
 
 type DrawLogic struct {
 	generated_go.Draws
+	Matches []GameLogic
 }
 
 func NewDraw(
@@ -21,7 +22,8 @@ func NewDraw(
 		ExpectedNumberOfMatches: expectedNumberOfMatches,
 	}
 	return &DrawLogic{
-		Draws: d,
+		Draws:   d,
+		Matches: []GameLogic{},
 	}
 }
 
@@ -30,7 +32,7 @@ func (d *DrawLogic) AddMatchToDraw(
 	expectedNumberOfMatches uint32,
 ) (*DrawLogic, error) {
 	game := NewGame(expectedNumberOfPlayers)
-	d.Matches = append(d.Matches, generated_go.DrawsMatch{
+	d.Matches = append(d.Matches, GameLogic{
 		Game: game.Game,
 	})
 	return d, nil
