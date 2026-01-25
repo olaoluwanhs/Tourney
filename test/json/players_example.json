@@ -1,0 +1,12 @@
+[
+  {
+    "associatedImage": "https://example.com/images/player-1.png",
+    "id": "9e5613f9-a9fa-4a4e-8c1e-96e3e54da9a6",
+    "kind": "user",
+    "name": "Alice"
+  },
+  {
+    "kind": "id",
+    "value": "player-2"
+  }
+]

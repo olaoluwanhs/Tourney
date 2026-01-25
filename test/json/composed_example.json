@@ -1,0 +1,54 @@
+{
+  "draws": [
+    {
+      "expectedNumberOfMatches": 1,
+      "id": "aa7cda42-6b98-494d-9b63-8b26f3e723f5",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "4e39c9eb-ef1f-4e2b-8baf-0c848dd04987",
+            "players": [
+              {
+                "associatedImage": "https://example.com/images/player-1.png",
+                "id": "c257d708-a64c-4ad5-9f4e-04837f9a7f3a",
+                "kind": "user",
+                "name": "Alice"
+              },
+              {
+                "kind": "id",
+                "value": "player-2"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "c257d708-a64c-4ad5-9f4e-04837f9a7f3a",
+                "score": 12.5
+              },
+              {
+                "playerId": "player-2",
+                "score": 10.0
+              }
+            ]
+          }
+        }
+      ],
+      "round": 1
+    }
+  ],
+  "id": "902b5e81-ef93-4d34-a55a-5f1bd9f7cb50",
+  "leaderboard": [
+    {
+      "associatedImage": "https://example.com/images/player-1.png",
+      "id": "c257d708-a64c-4ad5-9f4e-04837f9a7f3a",
+      "kind": "user",
+      "name": "Alice"
+    },
+    {
+      "kind": "id",
+      "value": "player-2"
+    }
+  ],
+  "name": "Winter Cup",
+  "status": "ongoing"
+}

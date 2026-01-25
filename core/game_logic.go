@@ -18,6 +18,7 @@ func NewGame(expectedNumberOfPlayers uint32) *GameLogic {
 		Id:                      &u,
 		Scores:                  []generated_go.GameScore{},
 		ExpectedNumberOfPlayers: expectedNumberOfPlayers,
+		Players:                 []generated_go.Player{},
 	}
 
 	return &GameLogic{

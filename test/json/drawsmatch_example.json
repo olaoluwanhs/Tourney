@@ -1,0 +1,28 @@
+{
+  "game": {
+    "expectedNumberOfPlayers": 2,
+    "id": "a1b9e21e-00e5-4e7d-9a38-d37d6dee8cf4",
+    "players": [
+      {
+        "associatedImage": "https://example.com/images/player-1.png",
+        "id": "fdb7c6d6-5a70-4f2b-9e2f-5a6a0f85db69",
+        "kind": "user",
+        "name": "Alice"
+      },
+      {
+        "kind": "id",
+        "value": "player-2"
+      }
+    ],
+    "scores": [
+      {
+        "playerId": "fdb7c6d6-5a70-4f2b-9e2f-5a6a0f85db69",
+        "score": 12.5
+      },
+      {
+        "playerId": "player-2",
+        "score": 10.0
+      }
+    ]
+  }
+}
