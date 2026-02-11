@@ -21,6 +21,11 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "types-gen": "sh codegen.sh"
-  }
+    "types-gen": "sh codegen.sh",
+    "dev-webapp": "npm --prefix ./packages/testwebapp run dev"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
 }
