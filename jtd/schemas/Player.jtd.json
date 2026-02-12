@@ -5,14 +5,15 @@
       "mapping": {
         "id": {
           "properties": {
-            "value": { "type": "string" }
+            "value": { "type": "string" },
+            "error": { "type": "string", "nullable": true }
           }
         },
         "user": {
           "properties": {
             "id": { "type": "string" },
             "name": { "type": "string" },
-            "associatedImage": { "type": "string" }
+            "associatedImage": { "type": "string", "nullable": true }
           }
         }
       }

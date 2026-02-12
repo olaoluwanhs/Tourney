@@ -1,0 +1,493 @@
+{
+  "draws": [
+    {
+      "expectedNumberOfMatches": 2,
+      "id": "t2_d1",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m1",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/alpha.png",
+                "id": "alpha",
+                "name": "Aria"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/bravo.png",
+                "id": "bravo",
+                "name": "Ben"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/charlie.png",
+                "id": "charlie",
+                "name": "Cleo"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/delta.png",
+                "id": "delta",
+                "name": "Drew"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "alpha",
+                "score": 9
+              },
+              {
+                "playerId": "bravo",
+                "score": 12
+              },
+              {
+                "playerId": "charlie",
+                "score": 6.5
+              },
+              {
+                "playerId": "delta",
+                "score": 11
+              }
+            ],
+            "settled": true
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m2",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/echo.png",
+                "id": "echo",
+                "name": "Elle"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/foxtrot.png",
+                "id": "foxtrot",
+                "name": "Finn"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/golf.png",
+                "id": "golf",
+                "name": "Gia"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/hotel.png",
+                "id": "hotel",
+                "name": "Hugo"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "echo",
+                "score": 7
+              },
+              {
+                "playerId": "foxtrot",
+                "score": 14
+              },
+              {
+                "playerId": "golf",
+                "score": 13
+              },
+              {
+                "playerId": "hotel",
+                "score": 8
+              }
+            ],
+            "settled": true
+          }
+        }
+      ],
+      "round": 1
+    },
+    {
+      "expectedNumberOfMatches": 1,
+      "id": "t2_d2",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m3",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/bravo.png",
+                "id": "bravo",
+                "name": "Ben"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/delta.png",
+                "id": "delta",
+                "name": "Drew"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/foxtrot.png",
+                "id": "foxtrot",
+                "name": "Finn"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/golf.png",
+                "id": "golf",
+                "name": "Gia"
+              }
+            ],
+            "scores": [],
+            "settled": false
+          }
+        }
+      ],
+      "round": 2
+    }
+  ],
+  "id": "tournament-2",
+  "leaderboard": [
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/alpha.png",
+      "id": "alpha",
+      "name": "Aria"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/bravo.png",
+      "id": "bravo",
+      "name": "Ben"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/charlie.png",
+      "id": "charlie",
+      "name": "Cleo"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/delta.png",
+      "id": "delta",
+      "name": "Drew"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/echo.png",
+      "id": "echo",
+      "name": "Elle"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/foxtrot.png",
+      "id": "foxtrot",
+      "name": "Finn"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/golf.png",
+      "id": "golf",
+      "name": "Gia"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/hotel.png",
+      "id": "hotel",
+      "name": "Hugo"
+    }
+  ],
+  "name": "Top Two Advance",
+  "status": "ongoing",
+  "Draws": [
+    {
+      "expectedNumberOfMatches": 2,
+      "id": "t2_d1",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m1",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/alpha.png",
+                "id": "alpha",
+                "name": "Aria"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/bravo.png",
+                "id": "bravo",
+                "name": "Ben"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/charlie.png",
+                "id": "charlie",
+                "name": "Cleo"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/delta.png",
+                "id": "delta",
+                "name": "Drew"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "alpha",
+                "score": 9
+              },
+              {
+                "playerId": "bravo",
+                "score": 12
+              },
+              {
+                "playerId": "charlie",
+                "score": 6.5
+              },
+              {
+                "playerId": "delta",
+                "score": 11
+              }
+            ],
+            "settled": true
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m2",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/echo.png",
+                "id": "echo",
+                "name": "Elle"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/foxtrot.png",
+                "id": "foxtrot",
+                "name": "Finn"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/golf.png",
+                "id": "golf",
+                "name": "Gia"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/hotel.png",
+                "id": "hotel",
+                "name": "Hugo"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "echo",
+                "score": 7
+              },
+              {
+                "playerId": "foxtrot",
+                "score": 14
+              },
+              {
+                "playerId": "golf",
+                "score": 13
+              },
+              {
+                "playerId": "hotel",
+                "score": 8
+              }
+            ],
+            "settled": true
+          }
+        }
+      ],
+      "round": 1,
+      "Matches": [
+        {
+          "expectedNumberOfPlayers": 4,
+          "id": "t2m1",
+          "players": [
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/alpha.png",
+              "id": "alpha",
+              "name": "Aria"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/bravo.png",
+              "id": "bravo",
+              "name": "Ben"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/charlie.png",
+              "id": "charlie",
+              "name": "Cleo"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/delta.png",
+              "id": "delta",
+              "name": "Drew"
+            }
+          ],
+          "scores": [
+            {
+              "playerId": "alpha",
+              "score": 9
+            },
+            {
+              "playerId": "bravo",
+              "score": 12
+            },
+            {
+              "playerId": "charlie",
+              "score": 6.5
+            },
+            {
+              "playerId": "delta",
+              "score": 11
+            }
+          ],
+          "settled": true
+        },
+        {
+          "expectedNumberOfPlayers": 4,
+          "id": "t2m2",
+          "players": [
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/echo.png",
+              "id": "echo",
+              "name": "Elle"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/foxtrot.png",
+              "id": "foxtrot",
+              "name": "Finn"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/golf.png",
+              "id": "golf",
+              "name": "Gia"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/hotel.png",
+              "id": "hotel",
+              "name": "Hugo"
+            }
+          ],
+          "scores": [
+            {
+              "playerId": "echo",
+              "score": 7
+            },
+            {
+              "playerId": "foxtrot",
+              "score": 14
+            },
+            {
+              "playerId": "golf",
+              "score": 13
+            },
+            {
+              "playerId": "hotel",
+              "score": 8
+            }
+          ],
+          "settled": true
+        }
+      ]
+    },
+    {
+      "expectedNumberOfMatches": 2,
+      "id": "t2_d2",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 4,
+            "id": "t2m3",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/bravo.png",
+                "id": "bravo",
+                "name": "Ben"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/delta.png",
+                "id": "delta",
+                "name": "Drew"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/foxtrot.png",
+                "id": "foxtrot",
+                "name": "Finn"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/golf.png",
+                "id": "golf",
+                "name": "Gia"
+              }
+            ],
+            "scores": [],
+            "settled": false
+          }
+        }
+      ],
+      "round": 2,
+      "Matches": [
+        {
+          "expectedNumberOfPlayers": 4,
+          "id": "t2m3",
+          "players": [
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/bravo.png",
+              "id": "bravo",
+              "name": "Ben"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/delta.png",
+              "id": "delta",
+              "name": "Drew"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/foxtrot.png",
+              "id": "foxtrot",
+              "name": "Finn"
+            },
+            {
+              "kind": "user",
+              "associatedImage": "https://example.com/images/golf.png",
+              "id": "golf",
+              "name": "Gia"
+            }
+          ],
+          "scores": [],
+          "settled": false
+        }
+      ]
+    }
+  ]
+}

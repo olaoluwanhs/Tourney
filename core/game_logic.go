@@ -79,3 +79,19 @@ func (g *GameLogic) GetWinner() (string, float32, bool) {
 	}
 	return winner.PlayerId, winner.Score, true
 }
+
+// IsCompleted checks if the game has all expected players and scores
+func (g *GameLogic) IsCompleted() bool {
+	if uint32(len(g.Players)) < g.ExpectedNumberOfPlayers {
+		return false
+	}
+	if uint32(len(g.Scores)) < g.ExpectedNumberOfPlayers {
+		return false
+	}
+
+	if !g.Settled {
+		return false
+	}
+
+	return true
+}

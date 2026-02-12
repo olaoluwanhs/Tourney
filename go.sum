@@ -1,2 +1,4 @@
+github.com/bube054/go-js-array-methods v1.0.0 h1:dvcKTqe0JhGUi6qUxf+uCZuG4CYuZFrs6oJzCfa2Fus=
+github.com/bube054/go-js-array-methods v1.0.0/go.mod h1:x/bA2VAHAvGWDbA3gKUFVgBNQfBhhEmT++BSQcpTaSE=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
