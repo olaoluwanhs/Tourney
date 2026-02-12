@@ -1,0 +1,262 @@
+{
+  "draws": [
+    {
+      "expectedNumberOfMatches": 4,
+      "id": "t1_d1",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m1",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-1.png",
+                "id": "player-1",
+                "name": "Ava"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-2.png",
+                "id": "player-2",
+                "name": "Noah"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "player-1",
+                "score": 21
+              },
+              {
+                "playerId": "player-2",
+                "score": 18
+              }
+            ],
+            "settled": true
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m2",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-3.png",
+                "id": "player-3",
+                "name": "Liam"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-4.png",
+                "id": "player-4",
+                "name": "Maya"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "player-3",
+                "score": 15
+              },
+              {
+                "playerId": "player-4",
+                "score": 19.5
+              }
+            ],
+            "settled": true
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m3",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-5.png",
+                "id": "player-5",
+                "name": "Zoe"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-6.png",
+                "id": "player-6",
+                "name": "Kai"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "player-5",
+                "score": 17
+              },
+              {
+                "playerId": "player-6",
+                "score": 12
+              }
+            ],
+            "settled": true
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m4",
+            "players": [
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-7.png",
+                "id": "player-7",
+                "name": "Eli"
+              },
+              {
+                "kind": "user",
+                "associatedImage": "https://example.com/images/player-8.png",
+                "id": "player-8",
+                "name": "Nora"
+              }
+            ],
+            "scores": [
+              {
+                "playerId": "player-7",
+                "score": 20
+              },
+              {
+                "playerId": "player-8",
+                "score": 22
+              }
+            ],
+            "settled": true
+          }
+        }
+      ],
+      "round": 1
+    },
+    {
+      "expectedNumberOfMatches": 2,
+      "id": "t1_d2",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m5",
+            "players": [
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m1"
+              },
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m2"
+              }
+            ],
+            "scores": [],
+            "settled": false
+          }
+        },
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m6",
+            "players": [
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m3"
+              },
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m4"
+              }
+            ],
+            "scores": [],
+            "settled": false
+          }
+        }
+      ],
+      "round": 2
+    },
+    {
+      "expectedNumberOfMatches": 1,
+      "id": "t1_d3",
+      "matches": [
+        {
+          "game": {
+            "expectedNumberOfPlayers": 2,
+            "id": "t1m7",
+            "players": [
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m5"
+              },
+              {
+                "kind": "id",
+                "error": null,
+                "value": "1-t1m6"
+              }
+            ],
+            "scores": [],
+            "settled": false
+          }
+        }
+      ],
+      "round": 3
+    }
+  ],
+  "id": "tournament-1",
+  "leaderboard": [
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-8.png",
+      "id": "player-8",
+      "name": "Nora"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-1.png",
+      "id": "player-1",
+      "name": "Ava"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-7.png",
+      "id": "player-7",
+      "name": "Eli"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-4.png",
+      "id": "player-4",
+      "name": "Maya"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-2.png",
+      "id": "player-2",
+      "name": "Noah"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-5.png",
+      "id": "player-5",
+      "name": "Zoe"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-3.png",
+      "id": "player-3",
+      "name": "Liam"
+    },
+    {
+      "kind": "user",
+      "associatedImage": "https://example.com/images/player-6.png",
+      "id": "player-6",
+      "name": "Kai"
+    }
+  ],
+  "name": "Knockout Open",
+  "status": "ongoing"
+}
