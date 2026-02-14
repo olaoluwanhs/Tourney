@@ -1,0 +1,33 @@
+# Source files
+*.go
+*.sh
+go.mod
+go.sum
+*.md
+!README.md
+
+# Test files
+test/
+go_test_output.txt
+
+# Development
+packages/testwebapp/
+cmd/
+core/
+jtd/
+utils/
+.git/
+.gitignore
+
+# Build artifacts (keep only dist/)
+*.wasm.tmp
+node_modules/
+
+# Config files
+tsconfig.json
+codegen.sh
+wasm-build.sh
+composed.jtd.json
+*.jtd.json
+eslint.config.js
+vite.config.ts

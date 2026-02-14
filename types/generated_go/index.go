@@ -1,128 +1,154 @@
 package generated_go
 
+
 import "encoding/json"
+
+
 
 type Composed Tournament
 
+
 type PlayerKind string
+
 
 type TournamentStatus string
 
+
 const PlayerKindId PlayerKind = "id"
+
 
 const PlayerKindUser PlayerKind = "user"
 
+
 const TournamentStatusTournamentStatusCompleted TournamentStatus = "completed"
+
 
 const TournamentStatusTournamentStatusOngoing TournamentStatus = "ongoing"
 
+
 const TournamentStatusTournamentStatusScheduled TournamentStatus = "scheduled"
 
+
+
 type Draws struct {
-	ExpectedNumberOfMatches uint32 `json:"expectedNumberOfMatches"`
 
-	Id string `json:"id"`
+  ExpectedNumberOfMatches uint32 `json:"expectedNumberOfMatches"`
 
-	Matches []DrawsMatch `json:"matches"`
+  Id string `json:"id"`
 
-	Round uint8 `json:"round"`
+  Matches []DrawsMatch `json:"matches"`
+
+  Round uint8 `json:"round"`
 }
+
+
 
 type DrawsMatch struct {
-	Game Game `json:"game"`
+
+  Game Game `json:"game"`
 }
+
+
 
 type Game struct {
-	ExpectedNumberOfPlayers uint32 `json:"expectedNumberOfPlayers"`
 
-	Id *string `json:"id"`
+  ExpectedNumberOfPlayers uint32 `json:"expectedNumberOfPlayers"`
 
-	Players []Player `json:"players"`
+  Id *string `json:"id"`
 
-	Scores []GameScore `json:"scores"`
+  Players []Player `json:"players"`
 
-	Settled bool `json:"settled"`
+  Scores []GameScore `json:"scores"`
+
+  Settled bool `json:"settled"`
 }
+
+
 
 type GameScore struct {
-	PlayerId string `json:"playerId"`
 
-	Score float32 `json:"score"`
+  PlayerId string `json:"playerId"`
+
+  Score float32 `json:"score"`
 }
+
+
 
 type PlayerId struct {
-	Error *string `json:"error"`
 
-	Value string `json:"value"`
+  Error *string `json:"error"`
+
+  Value string `json:"value"`
 }
+
+
 
 type PlayerUser struct {
-	AssociatedImage *string `json:"associatedImage"`
 
-	Id string `json:"id"`
+  AssociatedImage *string `json:"associatedImage"`
 
-	Name string `json:"name"`
+  Id string `json:"id"`
+
+  Name string `json:"name"`
 }
+
+
 
 type Tournament struct {
-	Draws []Draws `json:"draws"`
 
-	Id string `json:"id"`
+  Draws []Draws `json:"draws"`
 
-	Leaderboard []Player `json:"leaderboard"`
+  Id string `json:"id"`
 
-	Name string `json:"name"`
+  Leaderboard []Player `json:"leaderboard"`
 
-	Status TournamentStatus `json:"status"`
+  Name string `json:"name"`
+
+  Status TournamentStatus `json:"status"`
 }
 
+
+
 type Player struct {
-	Kind PlayerKind `json:"kind"`
+  Kind PlayerKind `json:"kind"`
 
-	PlayerId `json:"-"`
+  PlayerId `json:"-"`
 
-	PlayerUser `json:"-"`
+  PlayerUser `json:"-"`
+
 }
 
 func (d Player) MarshalJSON() ([]byte, error) {
-	switch d.Kind {
+  switch d.Kind {
 
-	case "id":
-		return json.Marshal(struct {
-			Tag string `json:"kind"`
-			PlayerId
-		}{Tag: "id", PlayerId: d.PlayerId})
+  case "id":
+    return json.Marshal(struct { Tag string `json:"kind"`; PlayerId }{ Tag: "id", PlayerId: d.PlayerId })
 
-	case "user":
-		return json.Marshal(struct {
-			Tag string `json:"kind"`
-			PlayerUser
-		}{Tag: "user", PlayerUser: d.PlayerUser})
+  case "user":
+    return json.Marshal(struct { Tag string `json:"kind"`; PlayerUser }{ Tag: "user", PlayerUser: d.PlayerUser })
 
-	default:
-		panic("unknown discriminator variant")
-	}
+  default:
+    panic("unknown discriminator variant")
+  }
 }
 
 func (d *Player) UnmarshalJSON(b []byte) error {
-	var base struct {
-		Tag string `json:"kind"`
-	}
-	if err := json.Unmarshal(b, &base); err != nil {
-		return err
-	}
+  var base struct { Tag string `json:"kind"` }
+  if err := json.Unmarshal(b, &base); err != nil {
+    return err
+  }
 
-	switch base.Tag {
+  switch base.Tag {
 
-	case "id":
-		d.Kind = "id"
-		return json.Unmarshal(b, &d.PlayerId)
+  case "id":
+    d.Kind = "id"
+    return json.Unmarshal(b, &d.PlayerId)
 
-	case "user":
-		d.Kind = "user"
-		return json.Unmarshal(b, &d.PlayerUser)
+  case "user":
+    d.Kind = "user"
+    return json.Unmarshal(b, &d.PlayerUser)
 
-	default:
-		panic("unknown discriminator variant")
-	}
+  default:
+    panic("unknown discriminator variant")
+  }
 }
