@@ -1,5 +1,6 @@
 import type {
   Draws,
+  DrawsMatch,
   Game,
   Player,
   Tournament,
@@ -11,54 +12,14 @@ type WasmResult<T> = {
   error?: string;
 };
 
-type WinnerResult = {
-  playerId: string;
-  score: number;
-};
-
 declare global {
   interface Window {
     Go: new () => {
       importObject: WebAssembly.Imports;
       run: (instance: WebAssembly.Instance) => Promise<void>;
     };
-    tourneyNewTournament?: (name: string, status: string) => string;
-    tourneyTournamentFromJSON?: (payload: string) => string;
-    tourneyTournamentAddDraw?: (
-      tournamentId: string,
-      round: number,
-      expectedMatches: number,
-    ) => string;
-    tourneyTournamentRemoveDraw?: (
-      tournamentId: string,
-      drawId: string,
-    ) => string;
-    tourneyTournamentUpdateStatus?: (
-      tournamentId: string,
-      status: string,
-    ) => string;
-    tourneyTournamentProgress?: (tournamentId: string) => string;
-    tourneyTournamentMarshal?: (tournamentId: string) => string;
-    tourneyTournamentFindMatch?: (
-      tournamentId: string,
-      matchId: string,
-    ) => string;
-    tourneyTournamentFindDraw?: (
-      tournamentId: string,
-      drawId: string,
-    ) => string;
-    tourneyDrawAddMatch?: (drawId: string, expectedPlayers: number) => string;
-    tourneyDrawRemoveMatch?: (drawId: string, matchId: string) => string;
-    tourneyGameAddPlayer?: (gameId: string, playerJson: string) => string;
-    tourneyGameAddScore?: (
-      gameId: string,
-      playerId: string,
-      score: number,
-    ) => string;
-    tourneyGameGetScore?: (gameId: string, playerId: string) => string;
-    tourneyGameGetWinner?: (gameId: string) => string;
-    tourneyGameIsCompleted?: (gameId: string) => string;
-    tourneyGameIsFull?: (gameId: string) => string;
+    progressTournamentObject?: (tournamentJson: string) => string;
+    updateTournamentLeaderboard?: (tournamentJson: string) => string;
   }
 }
 
@@ -138,147 +99,278 @@ export type WasmInitOptions = {
 };
 
 export class TournamentWasm {
-  private id: string;
+  private wasmId: string | null = null;
+  tournament: Tournament;
 
-  private constructor(id: string) {
-    this.id = id;
+  private constructor(tournament: Tournament) {
+    this.tournament = tournament;
   }
 
-  static async init(options: WasmInitOptions = {}): Promise<void> {
+  async initWasm(options: WasmInitOptions = {}): Promise<void> {
     if (wasmState.ready) {
       return;
     }
-    const wasmExecUrl = options.wasmExecUrl ?? "/wasm/wasm_exec.js";
-    const wasmUrl = options.wasmUrl ?? "/wasm/tournament.wasm";
+    const wasmExecUrl = options.wasmExecUrl ?? "/wasm_exec.js";
+    const wasmUrl = options.wasmUrl ?? "/tournament.wasm";
 
     await loadScript(wasmExecUrl);
     await loadWasm(wasmUrl);
     wasmState.ready = true;
+    this.wasmId = Math.random().toString(36).substring(2, 10);
   }
 
   static create(name: string, status: Tournament["status"]): TournamentWasm {
-    if (!wasmState.ready) {
-      throw new Error("WASM not initialized. Call TournamentWasm.init first.");
-    }
-    const fn = ensureFn(window.tourneyNewTournament, "tourneyNewTournament");
-    const id = unwrap<string>(fn(name, status));
-    return new TournamentWasm(id);
+    const tournamentID =
+      "tournament_" + Math.random().toString(36).substring(2, 10);
+
+    const tournament: Tournament = {
+      name,
+      id: tournamentID,
+      status,
+      draws: [],
+      leaderboard: [],
+    };
+
+    return new TournamentWasm(tournament);
   }
 
   static fromJSON(payload: Tournament): TournamentWasm {
-    if (!wasmState.ready) {
-      throw new Error("WASM not initialized. Call TournamentWasm.init first.");
+    let tournamentId = payload.id;
+    if (!tournamentId) {
+      tournamentId =
+        "tournament_" + Math.random().toString(36).substring(2, 10);
     }
-    const fn = ensureFn(
-      window.tourneyTournamentFromJSON,
-      "tourneyTournamentFromJSON",
-    );
-    const id = unwrap<string>(fn(JSON.stringify(payload)));
-    return new TournamentWasm(id);
+    return new TournamentWasm({ ...payload, id: tournamentId });
   }
 
-  addDraw(round: number, expectedNumberOfMatches: number): string {
-    const fn = ensureFn(
-      window.tourneyTournamentAddDraw,
-      "tourneyTournamentAddDraw",
-    );
-    return unwrap<string>(fn(this.id, round, expectedNumberOfMatches));
+  get id(): string {
+    return this.tournament.id;
+  }
+
+  get name(): string {
+    return this.tournament.name;
+  }
+
+  get status(): Tournament["status"] {
+    return this.tournament.status;
+  }
+
+  get draws(): Draws[] {
+    return this.tournament.draws;
+  }
+
+  get leaderboard(): Player[] {
+    return this.tournament.leaderboard;
+  }
+
+  get tournamentObject(): Tournament {
+    return this.tournament;
+  }
+
+  addDraw(expectedNumberOfMatches: number, round?: number) {
+    // Pass in the expected number of matches in the draw and the position of the round in the tournament
+    let position = round ?? this.tournament.draws.length + 1;
+
+    // Add the draw at the position
+    this.tournament.draws.splice(position - 1, 0, {
+      id: "draw_" + Math.random().toString(36).substring(2, 10),
+      round: position,
+      matches: [],
+      expectedNumberOfMatches,
+    });
   }
 
   removeDraw(drawId: string): void {
-    const fn = ensureFn(
-      window.tourneyTournamentRemoveDraw,
-      "tourneyTournamentRemoveDraw",
+    this.tournament.draws = this.tournament.draws.filter(
+      (d) => d.id !== drawId,
     );
-    unwrap<void>(fn(this.id, drawId));
   }
 
   updateStatus(status: Tournament["status"]): void {
-    const fn = ensureFn(
-      window.tourneyTournamentUpdateStatus,
-      "tourneyTournamentUpdateStatus",
-    );
-    unwrap<void>(fn(this.id, status));
+    // Update local state
+    this.tournament.status = status;
   }
+
+  // WASM Dependent Methods
+  // This require that you've called initWasm() and that the WASM module is loaded and ready to use
 
   progress(): void {
+    if (!this.wasmId) {
+      throw new Error("WASM tournament ID not available");
+    }
+
     const fn = ensureFn(
-      window.tourneyTournamentProgress,
-      "tourneyTournamentProgress",
+      window.progressTournamentObject,
+      "progressTournamentObject",
     );
-    unwrap<void>(fn(this.id));
+    const updatedTournamentJson = unwrap<string>(
+      fn(JSON.stringify(this.tournament)),
+    );
+    const res = JSON.parse(updatedTournamentJson) as Tournament;
+    this.tournament = res;
   }
 
-  marshal(): Tournament {
-    const fn = ensureFn(
-      window.tourneyTournamentMarshal,
-      "tourneyTournamentMarshal",
-    );
-    const payload = unwrap<string>(fn(this.id));
-    return JSON.parse(payload) as Tournament;
+  updateLeaderboard(players: Player[]): void {
+    this.tournament.leaderboard = players;
   }
 
-  findMatch(matchId: string): Game {
-    const fn = ensureFn(
-      window.tourneyTournamentFindMatch,
-      "tourneyTournamentFindMatch",
-    );
-    const payload = unwrap<string>(fn(this.id, matchId));
-    return JSON.parse(payload) as Game;
+  // WASM Independent Methods
+  // These methods manipulate the tournament state locally and do not require the WASM module to be loaded. You can use these methods to set up your tournament before calling progress() for the first time.
+
+  findMatch(matchId: string): Game | undefined {
+    for (const draw of this.tournament.draws) {
+      for (const match of draw.matches) {
+        if (match.game.id === matchId) {
+          return match.game;
+        }
+      }
+    }
+    return undefined;
   }
 
-  findDraw(drawId: string): Draws {
-    const fn = ensureFn(
-      window.tourneyTournamentFindDraw,
-      "tourneyTournamentFindDraw",
-    );
-    const payload = unwrap<string>(fn(this.id, drawId));
-    return JSON.parse(payload) as Draws;
+  findDraw(drawId: string): Draws | undefined {
+    return this.tournament.draws.find((d) => d.id === drawId);
   }
 
-  addMatchToDraw(drawId: string, expectedNumberOfPlayers: number): string {
-    const fn = ensureFn(window.tourneyDrawAddMatch, "tourneyDrawAddMatch");
-    return unwrap<string>(fn(drawId, expectedNumberOfPlayers));
+  addMatchToDraw(drawId: string, expectedNumberOfPlayers: number): void {
+    const draw = this.findDraw(drawId);
+    if (!draw) {
+      throw new Error(`Draw with id ${drawId} not found`);
+    }
+
+    const newGame: Game = {
+      id: "game_" + Math.random().toString(36).substring(2, 10),
+      expectedNumberOfPlayers,
+      players: [],
+      scores: [],
+      settled: false,
+    };
+
+    const newMatch: DrawsMatch = {
+      game: newGame,
+    };
+
+    draw.matches.push(newMatch);
   }
 
   removeMatchFromDraw(drawId: string, matchId: string): void {
-    const fn = ensureFn(
-      window.tourneyDrawRemoveMatch,
-      "tourneyDrawRemoveMatch",
-    );
-    unwrap<void>(fn(drawId, matchId));
+    const draw = this.findDraw(drawId);
+    if (!draw) {
+      throw new Error(`Draw with id ${drawId} not found`);
+    }
+
+    draw.matches = draw.matches.filter((match) => match.game.id !== matchId);
   }
 
   addPlayerToGame(gameId: string, player: Player): void {
-    const fn = ensureFn(window.tourneyGameAddPlayer, "tourneyGameAddPlayer");
-    unwrap<void>(fn(gameId, JSON.stringify(player)));
+    const game = this.findMatch(gameId);
+    if (!game) {
+      throw new Error(`Game with id ${gameId} not found`);
+    }
+
+    // Check if player already exists in the game
+    const playerExists = game.players.some((p) => {
+      if (p.kind === "user" && player.kind === "user") {
+        return p.id === player.id;
+      }
+      return false;
+    });
+
+    if (playerExists) {
+      throw new Error(`Player already exists in game ${gameId}`);
+    }
+
+    // Check if game is already full
+    if (game.players.length >= game.expectedNumberOfPlayers) {
+      throw new Error(`Game ${gameId} is already full`);
+    }
+
+    game.players.push(player);
   }
 
   addScoreToGame(gameId: string, playerId: string, score: number): void {
-    const fn = ensureFn(window.tourneyGameAddScore, "tourneyGameAddScore");
-    unwrap<void>(fn(gameId, playerId, score));
+    const game = this.findMatch(gameId);
+    if (!game) {
+      throw new Error(`Game with id ${gameId} not found`);
+    }
+
+    // Check if player exists in the game
+    const playerExists = game.players.some(
+      (p) => p.kind === "user" && p.id === playerId,
+    );
+
+    if (!playerExists) {
+      throw new Error(`Player ${playerId} not found in game ${gameId}`);
+    }
+
+    // Check if score already exists for this player
+    const existingScoreIndex = game.scores.findIndex(
+      (s) => s.playerId === playerId,
+    );
+
+    if (existingScoreIndex >= 0) {
+      // Update existing score
+      game.scores[existingScoreIndex].score = score;
+    } else {
+      // Add new score
+      game.scores.push({ playerId, score });
+    }
   }
 
   getScore(gameId: string, playerId: string): number | null {
-    const fn = ensureFn(window.tourneyGameGetScore, "tourneyGameGetScore");
-    return unwrap<number | null>(fn(gameId, playerId));
+    const game = this.findMatch(gameId);
+    if (!game) {
+      return null;
+    }
+    const score = game.scores.find((s) => s.playerId === playerId);
+    return score ? score.score : null;
   }
 
-  getWinner(gameId: string): WinnerResult | null {
-    const fn = ensureFn(window.tourneyGameGetWinner, "tourneyGameGetWinner");
-    return unwrap<WinnerResult | null>(fn(gameId));
+  getWinner(
+    gameId: string,
+  ): { playerId: string; score: number; player: Player } | null {
+    const game = this.findMatch(gameId);
+    if (!game || game.scores.length === 0) {
+      return null;
+    }
+
+    const winner = game.scores.reduce((max, current) =>
+      current.score > max.score ? current : max,
+    );
+
+    return {
+      playerId: winner.playerId,
+      score: winner.score,
+      player: this.tournament.leaderboard.find(
+        (p) => p.kind === "user" && p.id === winner.playerId,
+      ) as Player,
+    };
   }
 
   isGameCompleted(gameId: string): boolean {
-    const fn = ensureFn(
-      window.tourneyGameIsCompleted,
-      "tourneyGameIsCompleted",
+    const game = this.findMatch(gameId);
+    if (!game) {
+      return false;
+    }
+    return (
+      game.settled &&
+      game.players.length >= game.expectedNumberOfPlayers &&
+      game.scores.length >= game.expectedNumberOfPlayers
     );
-    return unwrap<boolean>(fn(gameId));
   }
 
   isGameFull(gameId: string): boolean {
-    const fn = ensureFn(window.tourneyGameIsFull, "tourneyGameIsFull");
-    return unwrap<boolean>(fn(gameId));
+    const game = this.findMatch(gameId);
+    if (!game) {
+      return false;
+    }
+    return game.players.length >= game.expectedNumberOfPlayers;
+  }
+
+  settleGame(gameId: string): void {
+    const game = this.findMatch(gameId);
+    if (game) {
+      game.settled = true;
+    }
   }
 }
