@@ -223,7 +223,7 @@ npm install @olaoluwanhs/tourney
 ```
 
 ```typescript
-import { TournamentWasm } from "tourney";
+import { TournamentWasm } from "@olaoluwanhs/tourney";
 ```
 
 > **Note:** `TournamentWasm` is a **named export**, not a default export.
@@ -244,8 +244,8 @@ await tournament.initWasm({
 Copy the WASM assets from the package into your public directory:
 
 ```
-node_modules/tourney/packages/lib/wasm/tournament.wasm  →  public/tournament.wasm
-node_modules/tourney/packages/lib/wasm/wasm_exec.js     →  public/wasm_exec.js
+node_modules/@olaoluwanhs/tourney/packages/lib/wasm/tournament.wasm  →  public/tournament.wasm
+node_modules/@olaoluwanhs/tourney/packages/lib/wasm/wasm_exec.js     →  public/wasm_exec.js
 ```
 
 ### Creating a Tournament
@@ -430,7 +430,7 @@ Tourney ships a built-in visual UI for designing and managing tournaments. It is
 Launch it with:
 
 ```bash
-npx tourney launch-ui
+npx @olaoluwanhs/tourney launch-ui
 ```
 
 This starts a local Vite development server (on port 1234 by default) and opens the tournament builder in your browser. Features include:
@@ -458,7 +458,7 @@ import type {
   Player,
   PlayerId,
   PlayerUser,
-} from "tourney";
+} from "@olaoluwanhs/tourney";
 ```
 
 ### `Tournament`
@@ -632,7 +632,7 @@ Tourney/
 ├── index.ts                     # Library entry point
 ├── package.json                 # npm package manifest
 ├── go.mod                       # Go module definition
-└── testwebapp.js                # CLI entry for `npx tourney launch-ui`
+└── testwebapp.js                # CLI entry for `npx @olaoluwanhs/tourney launch-ui`
 ```
 
 ---
