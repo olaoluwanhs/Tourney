@@ -219,7 +219,7 @@ The JavaScript library wraps the Go core via WebAssembly. It is **browser-only**
 ### JS Installation
 
 ```bash
-npm install tourney
+npm install @olaoluwanhs/tourney
 ```
 
 ```typescript
