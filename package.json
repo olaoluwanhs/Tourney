@@ -1,5 +1,5 @@
 {
-  "name": "tourney",
+  "name": "@olaoluwanhs/tourney",
   "version": "1.0.0",
   "description": "This is a library that is used for managing tournaments",
   "keywords": [
@@ -42,8 +42,7 @@
     "types-gen": "sh codegen.sh",
     "wasm-build": "sh wasm-build.sh",
     "build:ts": "tsc && tsc --module commonjs --outDir dist/cjs && mv dist/cjs/index.js dist/index.cjs && rm -rf dist/cjs",
-    "build": "npm run types-gen && npm run wasm-build && npm run build:ts",
-    "prepublishOnly": "npm run build && npm run wasm-build"
+    "build": "npm run types-gen && npm run wasm-build && npm run build:ts"
   },
   "bin": {
     "launch-ui": "./testwebapp.js"

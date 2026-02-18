@@ -1,8 +1,12 @@
+
 export type Composed = Tournament;
+
 
 export type Player = PlayerId | PlayerUser;
 
+
 export interface Draws {
+
   expectedNumberOfMatches: number;
 
   id: string;
@@ -12,14 +16,18 @@ export interface Draws {
   round: number;
 }
 
+
 export interface DrawsMatch {
+
   game: Game;
 }
 
+
 export interface Game {
+
   expectedNumberOfPlayers: number;
 
-  id: string | undefined;
+  id: (string | undefined);
 
   players: Player[];
 
@@ -28,22 +36,28 @@ export interface Game {
   settled: boolean;
 }
 
+
 export interface GameScore {
+
   playerId: string;
 
   score: number;
 }
 
+
 export interface PlayerId {
-  error: string | undefined;
+
+  error: (string | undefined);
 
   kind: "id";
 
   value: string;
 }
 
+
 export interface PlayerUser {
-  associatedImage: string | undefined;
+
+  associatedImage: (string | undefined);
 
   id: string;
 
@@ -52,7 +66,9 @@ export interface PlayerUser {
   name: string;
 }
 
+
 export interface Tournament {
+
   draws: Draws[];
 
   id: string;
@@ -61,5 +77,6 @@ export interface Tournament {
 
   name: string;
 
-  status: "completed" | "ongoing" | "scheduled";
+  status: ("completed" | "ongoing" | "scheduled");
 }
+
