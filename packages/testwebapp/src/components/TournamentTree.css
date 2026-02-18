@@ -1,0 +1,62 @@
+.tournament-tree-canvas {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #0a0a15;
+}
+
+.tree-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.tree-empty-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+.tree-empty p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.tree-empty strong {
+  color: #646cff;
+}
+
+/* React Flow overrides for dark theme */
+.react-flow__edge-path {
+  stroke-width: 1.5;
+}
+
+.react-flow__controls {
+  background: #1e1e2e;
+  border: 1px solid #383860;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: #1e1e2e;
+  border: none;
+  border-bottom: 1px solid #383860;
+  color: #8b949e;
+  transition: background 0.2s;
+}
+
+.react-flow__controls-button:hover {
+  background: #383860;
+}
+
+.react-flow__controls-button svg {
+  fill: #c9d1d9;
+}

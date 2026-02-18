@@ -1,0 +1,101 @@
+/* Tab bar */
+.apm-tabs {
+  display: flex;
+  border-bottom: 1px solid #383860;
+  margin-bottom: 1.25rem;
+}
+
+.apm-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #8b949e;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  border-radius: 0;
+  margin-bottom: -1px;
+}
+
+.apm-tab:hover {
+  color: #c9d1d9;
+}
+
+.apm-tab.active {
+  color: #646cff;
+  border-bottom-color: #646cff;
+}
+
+/* Reference tab hint text */
+.apm-ref-hint {
+  font-size: 0.8rem;
+  color: #8b949e;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.apm-ref-hint code {
+  background: rgba(100, 108, 255, 0.1);
+  color: #a5b4fc;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+/* Preview row showing the encoded value */
+.apm-ref-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #0d1117;
+  border: 1px solid #383860;
+  border-radius: 6px;
+}
+
+.apm-ref-label {
+  font-size: 0.78rem;
+  color: #8b949e;
+  flex-shrink: 0;
+}
+
+.apm-ref-code {
+  font-family: "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: #a5b4fc;
+  background: rgba(100, 108, 255, 0.08);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* "already assigned" tag in roster list */
+.apm-tag {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: #8b949e;
+  flex-shrink: 0;
+}
+
+/* Select dropdowns inside modal */
+.modal-body select {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #383860;
+  border-radius: 6px;
+  color: #c9d1d9;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: auto;
+}
+
+.modal-body select:focus {
+  border-color: #646cff;
+}

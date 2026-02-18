@@ -1,0 +1,154 @@
+.create-form-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(100, 108, 255, 0.08) 0%,
+    #0a0a15 70%
+  );
+  padding: 2rem;
+}
+
+.create-form-card {
+  background: #12121f;
+  border: 1px solid #2a2a42;
+  border-radius: 16px;
+  padding: 2.5rem 2.25rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(100, 108, 255, 0.08);
+}
+
+.create-form-icon {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.create-form-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  text-align: center;
+  margin: 0 0 0.4rem;
+}
+
+.create-form-subtitle {
+  font-size: 0.88rem;
+  color: #8b949e;
+  text-align: center;
+  margin: 0 0 1.75rem;
+  line-height: 1.5;
+}
+
+.create-divider-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.create-field {
+  margin-bottom: 1rem;
+}
+
+.create-field label {
+  display: block;
+  font-size: 0.83rem;
+  color: #8b949e;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.create-field input,
+.create-field select {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #383860;
+  border-radius: 8px;
+  color: #c9d1d9;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.create-field input:focus,
+.create-field select:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.12);
+}
+
+.create-field select {
+  cursor: pointer;
+}
+
+.create-btn-primary {
+  width: 100%;
+  background: #646cff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition:
+    background 0.2s,
+    opacity 0.2s;
+}
+
+.create-btn-primary:hover:not(:disabled) {
+  background: #535bf2;
+}
+
+.create-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.create-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.25rem 0;
+  color: #555;
+  font-size: 0.8rem;
+}
+
+.create-divider::before,
+.create-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #2a2a42;
+}
+
+.create-btn-import {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed #383860;
+  border-radius: 8px;
+  color: #8b949e;
+  padding: 0.65rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
+}
+
+.create-btn-import:hover {
+  border-color: #646cff;
+  color: #a5b4fc;
+  background: rgba(100, 108, 255, 0.05);
+}

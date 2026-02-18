@@ -1,0 +1,143 @@
+.leaderboard-panel {
+  width: 220px;
+  flex-shrink: 0;
+  background: #12121f;
+  border-left: 1px solid #2a2a42;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid #2a2a42;
+}
+
+.leaderboard-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #c9d1d9;
+  margin: 0;
+}
+
+.leaderboard-count {
+  background: #2a2a42;
+  color: #8b949e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 20px;
+}
+
+.leaderboard-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.leaderboard-empty {
+  font-size: 0.8rem;
+  color: #555;
+  text-align: center;
+  padding: 1rem 0;
+  line-height: 1.5;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  background: #1a1a2e;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.leaderboard-row:hover {
+  border-color: #383860;
+}
+
+.lb-rank {
+  font-size: 0.7rem;
+  color: #555;
+  width: 18px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.lb-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #383860;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #c9d1d9;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.lb-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lb-name {
+  flex: 1;
+  font-size: 0.83rem;
+  color: #c9d1d9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lb-remove-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+}
+
+.leaderboard-row:hover .lb-remove-btn {
+  opacity: 1;
+}
+
+.lb-remove-btn:hover {
+  color: #f85149;
+}
+
+.lb-add-btn {
+  margin: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px dashed #383860;
+  background: transparent;
+  color: #646cff;
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.lb-add-btn:hover {
+  background: rgba(100, 108, 255, 0.08);
+  border-color: #646cff;
+}
