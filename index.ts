@@ -4,6 +4,8 @@ export {
   type WasmInitOptions,
 } from "./packages/lib/wasmTournament";
 
+export { TournamentEngine } from "./packages/lib/tournamentEngine";
+
 // Export generated types
 export type {
   Composed,

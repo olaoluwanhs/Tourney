@@ -22,14 +22,14 @@
   "author": "Olaoluwa Babatunde",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "./index.js",
+  "types": "./index.d.ts",
   "private": false,
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./index.js",
       "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./index.d.ts"
     },
     "./wasm/*": "./packages/lib/wasm/*"
   },
@@ -39,6 +39,8 @@
   ],
   "scripts": {
     "test": "go test -v ./test > go_test_output.txt",
+    "test:ts": "vitest run",
+    "test:ts:watch": "vitest",
     "dev-webapp": "npm --prefix ./packages/testwebapp run dev -- --port 1234",
     "types-gen": "sh codegen.sh",
     "wasm-build": "sh wasm-build.sh",
@@ -49,7 +51,8 @@
     "launch-ui": "./testwebapp.js"
   },
   "devDependencies": {
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "vitest": "^4.1.11"
   },
   "workspaces": [
     "packages/*"
