@@ -2,3 +2,4 @@
 node_modules
 /tests/results
 go_test_output.txt
+.npmrc
