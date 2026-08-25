@@ -35,7 +35,11 @@
   },
   "files": [
     "dist",
-    "packages/lib/wasm"
+    "index.js",
+    "index.d.ts",
+    "index.d.ts.map",
+    "packages/lib",
+    "types/generated_typescript"
   ],
   "scripts": {
     "test": "go test -v ./test > go_test_output.txt",
