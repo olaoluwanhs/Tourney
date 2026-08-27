@@ -525,6 +525,114 @@ describe("TournamentEngine", () => {
     });
   });
 
+  describe("progress() — Seat placement fixture", () => {
+    it("resolves seat-<index>-<matchId> references by seat position regardless of score", () => {
+      const engine = TournamentEngine.fromJSON(
+        structuredClone(knockoutFixture),
+      );
+
+      // Replace draw 2 match 1 players with seat references
+      const match5 = engine.findMatch("t1m5")!;
+      match5.players = [
+        { kind: "id", value: "seat-1-t1m1" },
+        { kind: "id", value: "seat-2-t1m2" },
+      ];
+
+      // Replace draw 2 match 2 players with seat references
+      const match6 = engine.findMatch("t1m6")!;
+      match6.players = [
+        { kind: "id", value: "seat-1-t1m3" },
+        { kind: "id", value: "seat-2-t1m4" },
+      ];
+
+      engine.progress();
+
+      // t1m5: seat-1-t1m1 → seat 1 of t1m1 = Ava (player-1)
+      //        seat-2-t1m2 → seat 2 of t1m2 = Maya (player-4)
+      expect(match5.players.length).toBe(2);
+      assertUserPlayer(match5.players[0], "player-1", "Ava");
+      assertUserPlayer(match5.players[1], "player-4", "Maya");
+
+      // t1m6: seat-1-t1m3 → seat 1 of t1m3 = Zoe (player-5)
+      //        seat-2-t1m4 → seat 2 of t1m4 = Nora (player-8)
+      expect(match6.players.length).toBe(2);
+      assertUserPlayer(match6.players[0], "player-5", "Zoe");
+      assertUserPlayer(match6.players[1], "player-8", "Nora");
+    });
+
+    it("resolves seat reference to the player in that seat even if they lost", () => {
+      const engine = TournamentEngine.fromJSON(
+        structuredClone(knockoutFixture),
+      );
+
+      // t1m1: Ava(21) beat Noah(18). Seat 2 = Noah (the loser).
+      // t1m2: Maya(19.5) beat Liam(15). Seat 1 = Liam (the loser).
+      const match5 = engine.findMatch("t1m5")!;
+      match5.players = [
+        { kind: "id", value: "seat-2-t1m1" }, // Noah — the loser
+        { kind: "id", value: "seat-1-t1m2" }, // Liam — the loser
+      ];
+
+      engine.progress();
+
+      assertUserPlayer(match5.players[0], "player-2", "Noah");
+      assertUserPlayer(match5.players[1], "player-3", "Liam");
+    });
+
+    it("sets error on invalid seat PlayerId format", () => {
+      const bad: Tournament = structuredClone(knockoutFixture);
+      // "seat-" with no index
+      (bad.draws[1].matches[0].game.players[0] as any) = {
+        kind: "id",
+        value: "seat-t1m1",
+      };
+
+      const engine = TournamentEngine.fromJSON(bad);
+      engine.progress();
+
+      const game = engine.findMatch("t1m5")!;
+      expect((game.players[0] as any).error).toContain(
+        "Invalid seat PlayerId format",
+      );
+    });
+
+    it("sets error when seat index is out of range", () => {
+      const bad: Tournament = structuredClone(knockoutFixture);
+      // Seat 99 is out of range (only 2 players)
+      (bad.draws[1].matches[0].game.players[0] as any) = {
+        kind: "id",
+        value: "seat-99-t1m1",
+      };
+
+      const engine = TournamentEngine.fromJSON(bad);
+      engine.progress();
+
+      const game = engine.findMatch("t1m5")!;
+      expect((game.players[0] as any).error).toContain("out of range");
+    });
+
+    it("sets error when seat player is not a resolved user", () => {
+      const bad: Tournament = structuredClone(knockoutFixture);
+      // Make t1m1 player 1 an unresolved PlayerId slot
+      (bad.draws[0].matches[0].game.players[0] as any) = {
+        kind: "id",
+        value: "1-t1m2",
+      };
+
+      // Set up a seat reference in t1m5 pointing to t1m1's seat 1
+      (bad.draws[1].matches[0].game.players[0] as any) = {
+        kind: "id",
+        value: "seat-1-t1m1",
+      };
+
+      const engine = TournamentEngine.fromJSON(bad);
+      engine.progress();
+
+      const game = engine.findMatch("t1m5")!;
+      expect((game.players[0] as any).error).toContain("not a resolved user");
+    });
+  });
+
   describe("updateLeaderboardOrder()", () => {
     it("sorts leaderboard by cumulative score descending", () => {
       const engine = TournamentEngine.fromJSON(structuredClone(topTwoFixture));

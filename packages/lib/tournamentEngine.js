@@ -292,49 +292,99 @@ export class TournamentEngine {
                         }
                         const playerIdSlot = player;
                         const parts = playerIdSlot.value.split("-");
-                        if (parts.length < 2) {
-                            playerIdSlot.error =
-                                "Invalid PlayerId format. Expected '<position>-<matchId>'";
-                            continue;
+                        // Detect mode: "seat" prefix → seat mode, otherwise score-rank mode
+                        if (parts[0] === "seat") {
+                            // Format: "seat-<seatIndex>-<matchId>"
+                            if (parts.length < 3) {
+                                playerIdSlot.error =
+                                    "Invalid seat PlayerId format. Expected 'seat-<seatIndex>-<matchId>'";
+                                continue;
+                            }
+                            const seatIndexStr = parts[1];
+                            const sourceMatchId = parts.slice(2).join("-");
+                            const seatIndex = parseInt(seatIndexStr, 10);
+                            if (isNaN(seatIndex) || seatIndex < 1) {
+                                playerIdSlot.error = `Invalid seat index in PlayerId: '${seatIndexStr}'`;
+                                continue;
+                            }
+                            // Find the source match
+                            const sourceGame = this.findMatch(sourceMatchId);
+                            if (!sourceGame) {
+                                playerIdSlot.error = `Source match '${sourceMatchId}' not found`;
+                                continue;
+                            }
+                            // Get the player at the specified seat index
+                            if (seatIndex > sourceGame.players.length) {
+                                playerIdSlot.error = `Seat index ${seatIndex} is out of range for match '${sourceMatchId}' (only ${sourceGame.players.length} players)`;
+                                continue;
+                            }
+                            const seatPlayer = sourceGame.players[seatIndex - 1];
+                            if (seatPlayer.kind !== "user") {
+                                playerIdSlot.error = `Player at seat ${seatIndex} in match '${sourceMatchId}' is not a resolved user (kind=${seatPlayer.kind})`;
+                                continue;
+                            }
+                            const targetPlayerId = seatPlayer.id;
+                            // Find the player in the leaderboard
+                            const leaderboardPlayer = this.tournament.leaderboard.find((p) => p.kind === "user" && p.id === targetPlayerId);
+                            if (!leaderboardPlayer) {
+                                playerIdSlot.error = `Player '${targetPlayerId}' not found in leaderboard`;
+                                continue;
+                            }
+                            // Mutate the slot to a PlayerUser
+                            match.game.players[i] = {
+                                kind: "user",
+                                id: leaderboardPlayer.id,
+                                name: leaderboardPlayer.name,
+                                associatedImage: leaderboardPlayer
+                                    .associatedImage,
+                            };
                         }
-                        const positionStr = parts[0];
-                        const sourceMatchId = parts.slice(1).join("-");
-                        const position = parseInt(positionStr, 10);
-                        if (isNaN(position) || position < 1) {
-                            playerIdSlot.error = `Invalid position in PlayerId: '${positionStr}'`;
-                            continue;
+                        else {
+                            // Score-rank mode: format "<position>-<matchId>"
+                            if (parts.length < 2) {
+                                playerIdSlot.error =
+                                    "Invalid PlayerId format. Expected '<position>-<matchId>'";
+                                continue;
+                            }
+                            const positionStr = parts[0];
+                            const sourceMatchId = parts.slice(1).join("-");
+                            const position = parseInt(positionStr, 10);
+                            if (isNaN(position) || position < 1) {
+                                playerIdSlot.error = `Invalid position in PlayerId: '${positionStr}'`;
+                                continue;
+                            }
+                            // Find the source match
+                            const sourceGame = this.findMatch(sourceMatchId);
+                            if (!sourceGame) {
+                                playerIdSlot.error = `Source match '${sourceMatchId}' not found`;
+                                continue;
+                            }
+                            // Get scores from the source match, sorted descending
+                            if (sourceGame.scores.length === 0) {
+                                playerIdSlot.error = `Source match '${sourceMatchId}' has no scores`;
+                                continue;
+                            }
+                            const sortedScores = [...sourceGame.scores].sort((a, b) => b.score - a.score);
+                            if (position > sortedScores.length) {
+                                playerIdSlot.error = `Position ${position} is out of range for match '${sourceMatchId}' (only ${sortedScores.length} players)`;
+                                continue;
+                            }
+                            const winnerScore = sortedScores[position - 1];
+                            // Find the player in the leaderboard
+                            const leaderboardPlayer = this.tournament.leaderboard.find((p) => p.kind === "user" && p.id === winnerScore.playerId);
+                            if (!leaderboardPlayer) {
+                                playerIdSlot.error = `Player '${winnerScore.playerId}' not found in leaderboard`;
+                                continue;
+                            }
+                            // Mutate the slot to a PlayerUser
+                            match.game.players[i] = {
+                                kind: "user",
+                                id: leaderboardPlayer.id,
+                                name: leaderboardPlayer.name,
+                                associatedImage: leaderboardPlayer
+                                    .associatedImage,
+                            };
                         }
-                        // Find the source match
-                        const sourceGame = this.findMatch(sourceMatchId);
-                        if (!sourceGame) {
-                            playerIdSlot.error = `Source match '${sourceMatchId}' not found`;
-                            continue;
-                        }
-                        // Get scores from the source match, sorted descending
-                        if (sourceGame.scores.length === 0) {
-                            playerIdSlot.error = `Source match '${sourceMatchId}' has no scores`;
-                            continue;
-                        }
-                        const sortedScores = [...sourceGame.scores].sort((a, b) => b.score - a.score);
-                        if (position > sortedScores.length) {
-                            playerIdSlot.error = `Position ${position} is out of range for match '${sourceMatchId}' (only ${sortedScores.length} players)`;
-                            continue;
-                        }
-                        const winnerScore = sortedScores[position - 1];
-                        // Find the player in the leaderboard
-                        const leaderboardPlayer = this.tournament.leaderboard.find((p) => p.kind === "user" && p.id === winnerScore.playerId);
-                        if (!leaderboardPlayer) {
-                            playerIdSlot.error = `Player '${winnerScore.playerId}' not found in leaderboard`;
-                            continue;
-                        }
-                        // Mutate the slot to a PlayerUser
-                        match.game.players[i] = {
-                            kind: "user",
-                            id: leaderboardPlayer.id,
-                            name: leaderboardPlayer.name,
-                            associatedImage: leaderboardPlayer
-                                .associatedImage,
-                        };
                     }
                 }
                 // Only progress the first incomplete draw

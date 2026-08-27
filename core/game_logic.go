@@ -80,6 +80,16 @@ func (g *GameLogic) GetWinner() (string, float32, bool) {
 	return winner.PlayerId, winner.Score, true
 }
 
+// GetPlayerAtSeat returns the player at the given seat index (1-indexed).
+// The seat index corresponds to the player's position in the game's players array,
+// independent of their score. Returns false if the index is out of range.
+func (g *GameLogic) GetPlayerAtSeat(index int) (*generated_go.Player, bool) {
+	if index < 1 || index > len(g.Players) {
+		return nil, false
+	}
+	return &g.Players[index-1], true
+}
+
 // IsCompleted checks if the game has all expected players and scores
 func (g *GameLogic) IsCompleted() bool {
 	if uint32(len(g.Players)) < g.ExpectedNumberOfPlayers {

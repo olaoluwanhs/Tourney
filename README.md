@@ -323,8 +323,29 @@ tournament.addPlayerToGame(semifinalMatchId, {
 tournament.addPlayerToGame(semifinalMatchId, {
   kind: "id",
   value: `2-${otherQuarterfinalMatchId}`, // runner-up of another quarterfinal
+```
+
+#### Adding seat references (for draws after the first)
+
+For formats where players must play a fixed number of games regardless of win/loss, use seat references to place the player who occupies a specific seat in a source match:
+
+```typescript
+// "seat-<seatIndex>-<matchId>" means: the player in the given seat of the match
+tournament.addPlayerToGame(nextRoundMatchId, {
+  kind: "id",
+  value: `seat-1-${previousMatchId}`, // player in seat 1 of the previous match
+});
+
+tournament.addPlayerToGame(nextRoundMatchId, {
+  kind: "id",
+  value: `seat-2-${otherPreviousMatchId}`, // player in seat 2 of another match
 });
 ```
+
+Call `tournament.progress()` (after WASM init) to resolve these references once the referenced matches are settled.
+});
+
+````
 
 Call `tournament.progress()` (after WASM init) to resolve these references once the referenced matches are settled.
 
@@ -344,7 +365,7 @@ const winner = tournament.getWinner(matchId);
 const score = tournament.getScore(matchId, "player-1"); // 100
 const completed = tournament.isGameCompleted(matchId); // true
 const full = tournament.isGameFull(matchId); // true
-```
+````
 
 #### Leaderboard
 
@@ -530,18 +551,18 @@ interface PlayerId {
 
 ## Player References — Cross-Draw Progression
 
-In knockout or multi-stage tournaments, the players who participate in later draws are determined by the results of earlier ones. Tourney handles this with **position references**.
+In knockout or multi-stage tournaments, the players who participate in later draws are determined by the results of earlier ones. Tourney handles this with **position references** and **seat references**.
 
-### Format
+### Score-Rank References (existing)
 
 ```
 "<position>-<matchId>"
 ```
 
-- `position` — the 1-indexed rank by descending score (1 = highest scorer, 2 = second highest, etc.)
+- `position` — the 1-indexed rank by descending score (1 = highest scorer/winner, 2 = second highest/runner-up, etc.)
 - `matchId` — the `id` of the game from any previous draw
 
-### Example
+#### Example
 
 ```
 "1-game_abc123"   →  the winner (1st place) of match game_abc123
@@ -549,17 +570,36 @@ In knockout or multi-stage tournaments, the players who participate in later dra
 "1-game_xyz789"   →  the winner of a different match
 ```
 
+### Seat References (new)
+
+```
+"seat-<seatIndex>-<matchId>"
+```
+
+- `seatIndex` — the 1-indexed slot in the game's `players` array (1 = first player in the array, 2 = second player, etc.)
+- `matchId` — the `id` of the game from any previous draw
+
+This places the player who occupies a specific seat in the source match, **regardless of who wins or loses**. Useful for formats where everyone plays a fixed number of games.
+
+#### Example
+
+```
+"seat-1-game_abc123"   →  the player in seat 1 of match game_abc123 (may be the winner or loser)
+"seat-2-game_abc123"   →  the player in seat 2 of match game_abc123
+```
+
 ### How resolution works
 
 When `progress()` (JS) or `ProgressTournamentLogic()` (Go) is called:
 
 1. The engine scans each draw in order, stopping at the first incomplete one.
-2. For every `PlayerId` slot in that draw's matches, it splits the value on `"-"` to extract the position and match ID.
-3. It looks up that match, sorts its scores in descending order, and picks the player at (position − 1).
-4. The `PlayerId` slot is mutated in place to become a full `PlayerUser` with the real player's data.
-5. Any resolution failure (match not found, position out of range, player not on leaderboard) sets the `error` field on the `PlayerId` instead of crashing.
+2. For every `PlayerId` slot in that draw's matches, it inspects the value:
+   - If the value starts with `"seat-"`, it extracts the seat index and match ID, then picks the player at `players[seatIndex - 1]` from the source match.
+   - Otherwise, it splits on `"-"` to extract the position and match ID, sorts the source match's scores in descending order, and picks the player at (position − 1).
+3. The `PlayerId` slot is mutated in place to become a full `PlayerUser` with the real player's data.
+4. Any resolution failure (match not found, position/seat out of range, player not on leaderboard, unresolved seat player) sets the `error` field on the `PlayerId` instead of crashing.
 
-> **Important:** The player must be present in the tournament's leaderboard for resolution to succeed. Make sure you call `updateLeaderboard` with all participants before calling `progress()`.
+> **Important:** The player must be present in the tournament's leaderboard for resolution to succeed. Make sure you call `updateLeaderboard` with all participants before calling `progress()`. For seat references, the player at the specified seat must already be a resolved `PlayerUser` (not another `PlayerId` slot).
 
 ---
 

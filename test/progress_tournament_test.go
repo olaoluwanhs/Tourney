@@ -138,3 +138,47 @@ func TestProgressTournament_TopTwoAdvanceFixture(t *testing.T) {
 	assertUserPlayer(t, players[2], "foxtrot", "Finn", "https://example.com/images/foxtrot.png")
 	assertUserPlayer(t, players[3], "golf", "Gia", "https://example.com/images/golf.png")
 }
+
+func TestProgressTournament_SeatPlacementFixture(t *testing.T) {
+	tournaments := loadProgressTournamentFixtures(t)
+	if len(tournaments) < 3 {
+		t.Fatalf("expected at least 3 tournament fixtures")
+	}
+
+	tournament := tournaments[2]
+	if len(tournament.Draws) < 2 {
+		t.Fatalf("expected at least 2 draws in seat placement fixture")
+	}
+
+	// Mark draw 2 as incomplete to force progression.
+	tournament.Draws[1].ExpectedNumberOfMatches = 2
+
+	if err := tournament.ProgressTournamentLogic(); err != nil {
+		t.Fatalf("ProgressTournamentLogic returned error: %v", err)
+	}
+
+	// Export the json of the progressed tournament into a file
+	progressedTournamentJSON, err := json.MarshalIndent(tournament, "", " ")
+	if err != nil {
+		t.Fatalf("failed to marshal progressed tournament: %v", err)
+	}
+	utils.WriteFile("results/progress_tournament_result.json", progressedTournamentJSON)
+
+	// t3m5: seat-1-t3m1 → seat 1 of t3m1 = Ava (player-1)
+	//        seat-2-t3m2 → seat 2 of t3m2 = Maya (player-4)
+	matchOnePlayers := tournament.Draws[1].Matches[0].Game.Players
+	if len(matchOnePlayers) != 2 {
+		t.Fatalf("expected 2 players in draw 2 match 1, got %d", len(matchOnePlayers))
+	}
+	assertUserPlayer(t, matchOnePlayers[0], "player-1", "Ava", "https://example.com/images/player-1.png")
+	assertUserPlayer(t, matchOnePlayers[1], "player-4", "Maya", "https://example.com/images/player-4.png")
+
+	// t3m6: seat-1-t3m3 → seat 1 of t3m3 = Zoe (player-5)
+	//        seat-2-t3m4 → seat 2 of t3m4 = Nora (player-8)
+	matchTwoPlayers := tournament.Draws[1].Matches[1].Game.Players
+	if len(matchTwoPlayers) != 2 {
+		t.Fatalf("expected 2 players in draw 2 match 2, got %d", len(matchTwoPlayers))
+	}
+	assertUserPlayer(t, matchTwoPlayers[0], "player-5", "Zoe", "https://example.com/images/player-5.png")
+	assertUserPlayer(t, matchTwoPlayers[1], "player-8", "Nora", "https://example.com/images/player-8.png")
+}

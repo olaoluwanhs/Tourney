@@ -449,5 +449,210 @@
     ],
     "name": "Top Two Advance",
     "status": "ongoing"
+  },
+  {
+    "draws": [
+      {
+        "expectedNumberOfMatches": 4,
+        "id": "t3_d1",
+        "matches": [
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m1",
+              "settled": true,
+              "players": [
+                {
+                  "associatedImage": "https://example.com/images/player-1.png",
+                  "id": "player-1",
+                  "kind": "user",
+                  "name": "Ava"
+                },
+                {
+                  "associatedImage": "https://example.com/images/player-2.png",
+                  "id": "player-2",
+                  "kind": "user",
+                  "name": "Noah"
+                }
+              ],
+              "scores": [
+                { "playerId": "player-1", "score": 21.0 },
+                { "playerId": "player-2", "score": 18.0 }
+              ]
+            }
+          },
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m2",
+              "settled": true,
+              "players": [
+                {
+                  "associatedImage": "https://example.com/images/player-3.png",
+                  "id": "player-3",
+                  "kind": "user",
+                  "name": "Liam"
+                },
+                {
+                  "associatedImage": "https://example.com/images/player-4.png",
+                  "id": "player-4",
+                  "kind": "user",
+                  "name": "Maya"
+                }
+              ],
+              "scores": [
+                { "playerId": "player-3", "score": 15.0 },
+                { "playerId": "player-4", "score": 19.5 }
+              ]
+            }
+          },
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m3",
+              "settled": true,
+              "players": [
+                {
+                  "associatedImage": "https://example.com/images/player-5.png",
+                  "id": "player-5",
+                  "kind": "user",
+                  "name": "Zoe"
+                },
+                {
+                  "associatedImage": "https://example.com/images/player-6.png",
+                  "id": "player-6",
+                  "kind": "user",
+                  "name": "Kai"
+                }
+              ],
+              "scores": [
+                { "playerId": "player-5", "score": 17.0 },
+                { "playerId": "player-6", "score": 12.0 }
+              ]
+            }
+          },
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m4",
+              "settled": true,
+              "players": [
+                {
+                  "associatedImage": "https://example.com/images/player-7.png",
+                  "id": "player-7",
+                  "kind": "user",
+                  "name": "Eli"
+                },
+                {
+                  "associatedImage": "https://example.com/images/player-8.png",
+                  "id": "player-8",
+                  "kind": "user",
+                  "name": "Nora"
+                }
+              ],
+              "scores": [
+                { "playerId": "player-7", "score": 20.0 },
+                { "playerId": "player-8", "score": 22.0 }
+              ]
+            }
+          }
+        ],
+        "round": 1
+      },
+      {
+        "expectedNumberOfMatches": 2,
+        "id": "t3_d2",
+        "matches": [
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m5",
+              "players": [
+                {
+                  "kind": "id",
+                  "value": "seat-1-t3m1"
+                },
+                {
+                  "kind": "id",
+                  "value": "seat-2-t3m2"
+                }
+              ],
+              "scores": []
+            }
+          },
+          {
+            "game": {
+              "expectedNumberOfPlayers": 2,
+              "id": "t3m6",
+              "players": [
+                {
+                  "kind": "id",
+                  "value": "seat-1-t3m3"
+                },
+                {
+                  "kind": "id",
+                  "value": "seat-2-t3m4"
+                }
+              ],
+              "scores": []
+            }
+          }
+        ],
+        "round": 2
+      }
+    ],
+    "id": "tournament-3",
+    "leaderboard": [
+      {
+        "associatedImage": "https://example.com/images/player-1.png",
+        "id": "player-1",
+        "kind": "user",
+        "name": "Ava"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-2.png",
+        "id": "player-2",
+        "kind": "user",
+        "name": "Noah"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-3.png",
+        "id": "player-3",
+        "kind": "user",
+        "name": "Liam"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-4.png",
+        "id": "player-4",
+        "kind": "user",
+        "name": "Maya"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-5.png",
+        "id": "player-5",
+        "kind": "user",
+        "name": "Zoe"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-6.png",
+        "id": "player-6",
+        "kind": "user",
+        "name": "Kai"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-7.png",
+        "id": "player-7",
+        "kind": "user",
+        "name": "Eli"
+      },
+      {
+        "associatedImage": "https://example.com/images/player-8.png",
+        "id": "player-8",
+        "kind": "user",
+        "name": "Nora"
+      }
+    ],
+    "name": "Seat Placement Test",
+    "status": "ongoing"
   }
 ]

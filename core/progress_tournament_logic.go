@@ -11,6 +11,132 @@ import (
 	generated_go "github.com/olaoluwanhs/Tourney/types/generated_go"
 )
 
+// resolvePlayerId resolves a PlayerId slot to a real PlayerUser.
+// It supports two formats:
+//   - "<position>-<matchId>" — score-rank mode: position is the 1-indexed rank by descending score
+//   - "seat-<seatIndex>-<matchId>" — seat mode: seatIndex is the 1-indexed slot in the game's players array
+//
+// On failure, it sets p.Error and returns. On success, it mutates p in place to a PlayerUser.
+func (t *TournamentLogic) resolvePlayerId(p *generated_go.Player, match *GameLogic, drawId string) {
+	previousMatchDetails := strings.Split(p.Value, "-")
+
+	// Detect mode: "seat" prefix → seat mode, otherwise score-rank mode
+	if previousMatchDetails[0] == "seat" {
+		// Format: "seat-<seatIndex>-<matchId>"
+		if len(previousMatchDetails) < 3 {
+			errorMsg := fmt.Sprintf("Invalid seat player definition %s, expected format is seat-<seatIndex>-<matchId>", p.Value)
+			p.Error = &errorMsg
+			return
+		}
+
+		seatIndex, err := strconv.Atoi(previousMatchDetails[1])
+		if err != nil || seatIndex < 1 {
+			errorMsg := fmt.Sprintf("Invalid seat index %s in player definition %s", previousMatchDetails[1], p.Value)
+			p.Error = &errorMsg
+			return
+		}
+
+		previousMatchId := strings.Join(previousMatchDetails[2:], "-")
+
+		// Find the source match
+		previousMatch, err := t.FindInMatchInTournament(previousMatchId)
+		if err != nil {
+			errorMsg := fmt.Sprintf("Cannot find the match with the specified id %s in the previous draw", previousMatchId)
+			p.Error = &errorMsg
+			return
+		}
+
+		// Get the player at the specified seat index
+		seatPlayer, ok := previousMatch.GetPlayerAtSeat(seatIndex)
+		if !ok {
+			errorMsg := fmt.Sprintf("Invalid seat index %d, match %s only has %d players", seatIndex, previousMatchId, len(previousMatch.Players))
+			p.Error = &errorMsg
+			return
+		}
+
+		// The player at the seat must be a real user (not a PlayerId slot)
+		if seatPlayer.Kind != "user" {
+			errorMsg := fmt.Sprintf("Player at seat %d in match %s is not a resolved user (kind=%s)", seatIndex, previousMatchId, seatPlayer.Kind)
+			p.Error = &errorMsg
+			return
+		}
+
+		targetPlayerId := seatPlayer.PlayerUser.Id
+
+		playerFound := array.Find(t.Leaderboard, func(player generated_go.Player, ind int, list []generated_go.Player) bool {
+			return player.Kind == "user" && player.PlayerUser.Id == targetPlayerId
+		})
+
+		if playerFound == nil {
+			errorMsg := fmt.Sprintf("Cannot find the player with id %s in the leaderboard", targetPlayerId)
+			p.Error = &errorMsg
+			return
+		}
+
+		// Mutate the original player in place
+		p.Kind = "user"
+		p.PlayerUser = playerFound.PlayerUser
+
+		log.Printf("%s has been added to the match with id %s in draw %s (seat %d)", p.PlayerUser.Name, *match.Game.Id, drawId, seatIndex)
+		return
+	}
+
+	// Score-rank mode: format "<position>-<matchId>"
+	if len(previousMatchDetails) < 2 {
+		errorMsg := fmt.Sprintf("Invalid player definition %s, expected format is <position>-<matchId> or seat-<seatIndex>-<matchId>", p.Value)
+		p.Error = &errorMsg
+		return
+	}
+
+	previousMatchPlayerPosition, err := strconv.Atoi(previousMatchDetails[0])
+	if err != nil || previousMatchPlayerPosition < 1 {
+		errorMsg := fmt.Sprintf("Invalid player position %s for match id %s", previousMatchDetails[0], strings.Join(previousMatchDetails[1:], "-"))
+		p.Error = &errorMsg
+		return
+	}
+
+	previousMatchId := strings.Join(previousMatchDetails[1:], "-")
+
+	// Find the match in the previous draw with the specified match id
+	previousMatch, err := t.FindInMatchInTournament(previousMatchId)
+	if err != nil {
+		errorMsg := fmt.Sprintf("Cannot find the match with the specified id %s in the previous draw", previousMatchId)
+		p.Error = &errorMsg
+		return
+	}
+
+	// Sort the players in the match by their score (descending: highest first)
+	sortedScores := make([]generated_go.GameScore, len(previousMatch.Scores))
+	copy(sortedScores, previousMatch.Scores)
+	slices.SortFunc(sortedScores, func(a generated_go.GameScore, b generated_go.GameScore) int {
+		return int(b.Score - a.Score)
+	})
+
+	if previousMatchPlayerPosition > len(sortedScores) {
+		errorMsg := fmt.Sprintf("Invalid player position %d, match only has %d players", previousMatchPlayerPosition, len(sortedScores))
+		p.Error = &errorMsg
+		return
+	}
+
+	targetPlayerId := sortedScores[previousMatchPlayerPosition-1].PlayerId
+
+	playerFound := array.Find(t.Leaderboard, func(player generated_go.Player, ind int, list []generated_go.Player) bool {
+		return player.Kind == "user" && player.PlayerUser.Id == targetPlayerId
+	})
+
+	if playerFound == nil {
+		errorMsg := fmt.Sprintf("Cannot find the player with id %s in the leaderboard", targetPlayerId)
+		p.Error = &errorMsg
+		return
+	}
+
+	// Mutate the original player in place
+	p.Kind = "user"
+	p.PlayerUser = playerFound.PlayerUser
+
+	log.Printf("%s has been added to the match with id %s in draw %s", p.PlayerUser.Name, *match.Game.Id, drawId)
+}
+
 func (t *TournamentLogic) ProgressTournamentLogic() error {
 	stageProgressionInteger := 0
 	// Get the current draws
@@ -67,61 +193,7 @@ func (t *TournamentLogic) ProgressTournamentLogic() error {
 			for playerIdx := range match.Players {
 				p := &match.Players[playerIdx]
 				if p.Kind == "id" {
-					previousMatchDetails := strings.Split(p.Value, "-") // (e.g "1-<matchId>", ["1", "<matchId>"])
-
-					if len(previousMatchDetails) != 2 {
-						errorMsg := fmt.Sprintf("Invalid player definition %s, expected format is <position>-<matchId>", p.Value)
-						p.Error = &errorMsg
-						continue
-					}
-
-					previousMatchId := previousMatchDetails[1]
-					previousMatchPlayerPosition, err := strconv.Atoi(previousMatchDetails[0])
-					// Confirm that it is a valid player position (e.g "1", "2", "3", etc)
-					if err != nil || previousMatchPlayerPosition < 1 {
-						errorMsg := fmt.Sprintf("Invalid player position %s for match id %s", previousMatchDetails[0], previousMatchId)
-						p.Error = &errorMsg
-						continue
-					}
-
-					// Find the match in the previous draw with the specified match id
-					previousMatch, err := t.FindInMatchInTournament(previousMatchId)
-					if err != nil {
-						errorMsg := fmt.Sprintf("Cannot find the match with the specified id %s in the previous draw", previousMatchId)
-						p.Error = &errorMsg
-						continue
-					}
-
-					// Sort the players in the match by their score (descending: highest first)
-					sortedScores := make([]generated_go.GameScore, len(previousMatch.Scores))
-					copy(sortedScores, previousMatch.Scores)
-					slices.SortFunc(sortedScores, func(a generated_go.GameScore, b generated_go.GameScore) int {
-						return int(b.Score - a.Score)
-					})
-
-					if previousMatchPlayerPosition > len(sortedScores) {
-						errorMsg := fmt.Sprintf("Invalid player position %d, match only has %d players", previousMatchPlayerPosition, len(sortedScores))
-						p.Error = &errorMsg
-						continue
-					}
-
-					targetPlayerId := sortedScores[previousMatchPlayerPosition-1].PlayerId
-
-					playerFound := array.Find(t.Leaderboard, func(player generated_go.Player, ind int, list []generated_go.Player) bool {
-						return player.Kind == "user" && player.PlayerUser.Id == targetPlayerId
-					})
-
-					if playerFound == nil {
-						errorMsg := fmt.Sprintf("Cannot find the player with id %s in the leaderboard", targetPlayerId)
-						p.Error = &errorMsg
-						continue
-					}
-
-					// Mutate the original player in place
-					p.Kind = "user"
-					p.PlayerUser = playerFound.PlayerUser
-
-					log.Printf("%s has been added to the match with id %s in draw %s", p.PlayerUser.Name, *match.Game.Id, draw.Id)
+					t.resolvePlayerId(p, match, draw.Id)
 				}
 			}
 		}
